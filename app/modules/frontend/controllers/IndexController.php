@@ -6,7 +6,7 @@ namespace Test1\Modules\Frontend\Controllers;
 class IndexController extends ControllerBase
 {
 
-    public function indexAction($param )
+    public function indexAction($param ='test' )
     {
     $this->view->setVar('param',$param);
     }
