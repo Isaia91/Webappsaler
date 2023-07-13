@@ -1,5 +1,7 @@
 <?php
 
+namespace Test1\Models;
+
 class Commande extends \Phalcon\Mvc\Model
 {
 
@@ -192,10 +194,10 @@ class Commande extends \Phalcon\Mvc\Model
     {
         $this->setSchema("ECF7");
         $this->setSource("commande");
-        $this->belongsTo('id_application', '\Application', 'id', ['alias' => 'Application']);
-        $this->belongsTo('id_client', '\Client', 'id', ['alias' => 'Client']);
-        $this->belongsTo('id_composant', '\Composant', 'id', ['alias' => 'Composant']);
-        $this->belongsTo('id_module', '\Module', 'id', ['alias' => 'Module']);
+        $this->belongsTo('id_application', 'Test1\Models\Application', 'id', ['alias' => 'Application']);
+        $this->belongsTo('id_client', 'Test1\Models\Client', 'id', ['alias' => 'Client']);
+        $this->belongsTo('id_composant', 'Test1\Models\Composant', 'id', ['alias' => 'Composant']);
+        $this->belongsTo('id_module', 'Test1\Models\Module', 'id', ['alias' => 'Module']);
     }
 
     /**

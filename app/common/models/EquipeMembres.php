@@ -1,5 +1,7 @@
 <?php
 
+namespace Test1\Models;
+
 class EquipeMembres extends \Phalcon\Mvc\Model
 {
 
@@ -102,8 +104,8 @@ class EquipeMembres extends \Phalcon\Mvc\Model
     {
         $this->setSchema("ECF7");
         $this->setSource("equipe_membres");
-        $this->belongsTo('id_developpeur', '\Developpeur', 'id', ['alias' => 'Developpeur']);
-        $this->belongsTo('id_equipe', '\Equipe', 'id', ['alias' => 'Equipe']);
+        $this->belongsTo('id_developpeur', 'Test1\Models\Developpeur', 'id', ['alias' => 'Developpeur']);
+        $this->belongsTo('id_equipe', 'Test1\Models\Equipe', 'id', ['alias' => 'Equipe']);
     }
 
     /**

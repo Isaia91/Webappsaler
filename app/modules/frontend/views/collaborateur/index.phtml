@@ -1,0 +1,23 @@
+
+<table>
+    <?php if (!empty($collaborateurs)) {
+        foreach ($collaborateurs as $collaborateur) { ?>
+            <tr>
+                <th>id</th>
+                <th>prenom-nom</th>
+                <th>niveau-competence</th>
+                <th>prime d'embauche</th>
+            </tr>
+            <tr>
+                <td><?php echo $collaborateur->id; ?></td>
+                <td><?php echo $collaborateur->prenom_nom; ?></td>
+                <td><?php echo $collaborateur->niveau_competence; ?></td>
+                <td><?php echo $collaborateur->prime_embauche; ?></td>
+            </tr>
+        <?php }
+    } else { ?>
+        <tr>
+            <td colspan="3">Aucun collabo_ trouvé.</td>
+        </tr>
+    <?php } ?>
+</table>

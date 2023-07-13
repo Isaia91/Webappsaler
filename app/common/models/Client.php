@@ -1,5 +1,7 @@
 <?php
 
+namespace Test1\Models;
+
 class Client extends \Phalcon\Mvc\Model
 {
 
@@ -132,8 +134,8 @@ class Client extends \Phalcon\Mvc\Model
     {
         $this->setSchema("ECF7");
         $this->setSource("client");
-        $this->hasMany('id', 'Commande', 'id_client', ['alias' => 'Commande']);
-        $this->hasMany('id', 'Projet', 'id_client', ['alias' => 'Projet']);
+        $this->hasMany('id', 'Test1\Models\Commande', 'id_client', ['alias' => 'Commande']);
+        $this->hasMany('id', 'Test1\Models\Projet', 'id_client', ['alias' => 'Projet']);
     }
 
     /**

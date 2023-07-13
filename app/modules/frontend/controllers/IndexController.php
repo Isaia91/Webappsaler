@@ -8,7 +8,7 @@ class IndexController extends ControllerBase
 
     public function indexAction($param ='test' )
     {
-    $this->view->setVar('param',$param);
+    $this->view->setVar('hello',$param);
     }
 
 }

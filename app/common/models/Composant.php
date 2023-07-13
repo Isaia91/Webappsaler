@@ -1,5 +1,7 @@
 <?php
 
+namespace Test1\Models;
+
 class Composant extends \Phalcon\Mvc\Model
 {
 
@@ -192,9 +194,9 @@ class Composant extends \Phalcon\Mvc\Model
     {
         $this->setSchema("ECF7");
         $this->setSource("composant");
-        $this->hasMany('id', 'Commande', 'id_composant', ['alias' => 'Commande']);
-        $this->hasMany('id', 'Projet', 'id_composant', ['alias' => 'Projet']);
-        $this->belongsTo('id_module', '\Module', 'id', ['alias' => 'Module']);
+        $this->hasMany('id', 'Test1\Models\Commande', 'id_composant', ['alias' => 'Commande']);
+        $this->hasMany('id', 'Test1\Models\Projet', 'id_composant', ['alias' => 'Projet']);
+        $this->belongsTo('id_module', 'Test1\Models\Module', 'id', ['alias' => 'Module']);
     }
 
     /**
