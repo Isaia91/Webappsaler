@@ -1,13 +1,16 @@
 
-<table>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">prenom-nom</th>
+        <th scope="col">niveau-competence</th>
+        <th scope="col">prime d'embauche</th>
+    </tr>
+    </thead>
     <?php if (!empty($collaborateurs)) {
         foreach ($collaborateurs as $collaborateur) { ?>
-            <tr>
-                <th>id</th>
-                <th>prenom-nom</th>
-                <th>niveau-competence</th>
-                <th>prime d'embauche</th>
-            </tr>
+
             <tr>
                 <td><?php echo $collaborateur->id; ?></td>
                 <td><?php echo $collaborateur->prenom_nom; ?></td>

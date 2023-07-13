@@ -1,0 +1,26 @@
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">competence</th>
+        <th scope="col">indice-production</th>
+        <th scope="col">id-collaborateur</th>
+    </tr>
+    </thead>
+    <?php if (!empty($developpeurs)) {
+        foreach ($developpeurs as $developpeur) { ?>
+
+            <tr>
+                <td><?php echo $developpeur->id; ?></td>
+                <td><?php echo $developpeur->competence; ?></td>
+                <td><?php echo $developpeur->indice_production; ?></td>
+                <td><?php echo $developpeur->id_collaborateur; ?></td>
+            </tr>
+        <?php }
+    } else { ?>
+        <tr>
+            <td colspan="3">Aucun collabo_ trouvé.</td>
+        </tr>
+    <?php } ?>
+</table>
