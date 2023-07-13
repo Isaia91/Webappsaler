@@ -6,6 +6,7 @@
         <th scope="col">competence</th>
         <th scope="col">indice-production</th>
         <th scope="col">id-collaborateur</th>
+        <th scope="col">nom-prenom</th>
     </tr>
     </thead>
     <?php if (!empty($developpeurs)) {
@@ -16,6 +17,8 @@
                 <td><?php echo $developpeur->competence; ?></td>
                 <td><?php echo $developpeur->indice_production; ?></td>
                 <td><?php echo $developpeur->id_collaborateur; ?></td>
+                <td><?php echo $developpeur->getcollaborateur()->getPrenomNom();?></td>
+
             </tr>
         <?php }
     } else { ?>

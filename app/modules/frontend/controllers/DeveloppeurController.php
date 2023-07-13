@@ -11,7 +11,7 @@ class DeveloppeurController extends \Phalcon\Mvc\Controller
 
     public function indexAction( )
     {
-        $developpeurs = Developpeur::find();
+        $developpeurs = Developpeur::find(['include' => 'Collaborateur']);
         $this->view->setVar('developpeurs', $developpeurs);
     }
 

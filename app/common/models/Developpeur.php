@@ -136,7 +136,7 @@ class Developpeur extends \Phalcon\Mvc\Model
         $this->setSource("developpeur");
         $this->hasMany('id', 'Test1\Models\EquipeMembres', 'id_developpeur', ['alias' => 'EquipeMembres']);
         $this->hasMany('id', 'Test1\Models\Projet', 'id_developpeur', ['alias' => 'Projet']);
-        $this->belongsTo('id_collaborateur', 'Test1\Models\Collaborateur', 'id', ['alias' => 'Collaborateur']);
+        $this->belongsTo('id_collaborateur', Collaborateur::class, 'id', ['alias' => 'Collaborateur']);
     }
 
     /**
