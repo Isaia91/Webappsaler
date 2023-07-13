@@ -2,6 +2,8 @@
 
 namespace Test1\Models;
 
+use Phalcon\Validation;
+
 class Composant extends \Phalcon\Mvc\Model
 {
 
@@ -21,6 +23,9 @@ class Composant extends \Phalcon\Mvc\Model
      */
     protected $type;
 
+    const _TYPE_1_FRONTEND = 1;
+    const _TYPE_2_BACKEND = 2;
+    const _TYPE_3_DATABASE = 3;
     /**
      *
      * @var integer
@@ -144,9 +149,19 @@ class Composant extends \Phalcon\Mvc\Model
      */
     public function getType()
     {
-        return $this->type;
+        return intval($this->type);
     }
 
+    public function getTypeLibelle()
+    {
+        switch (this->getType())
+        {
+            case self::_TYPE_1_FRONTEND : return 'FRONTEND';
+            case self::_TYPE_2_BACKEND : return 'BACKEND';
+            case self::_TYPE_3_DATABASE : return 'BACKEND';
+            default : return 'Type unknown';
+        }
+    }
     /**
      * Returns the value of field charge
      *
@@ -221,4 +236,26 @@ class Composant extends \Phalcon\Mvc\Model
         return parent::findFirst($parameters);
     }
 
+    /**
+    * @return bool
+     */
+    public function validation()
+    {
+        $validator = new Validation();
+        $validator ->add(
+            'type',
+            new InclusionIn(
+                [
+                    'template'=>'le champ :field doit avoir une valeur entre 0 et 5',
+                    'message'=>'le champ :field doit avoir une valeur entre 0 et 5',
+                    'domain'=>[
+                        self::_TYPE_1_FRONTEND,
+                        self::_TYPE_2_BACKEND,
+                        self::_TYPE_3_DATABASE,
+                    ],
+                ]
+            )
+        );
+        return $this->validate($validator);
+    }
 }
