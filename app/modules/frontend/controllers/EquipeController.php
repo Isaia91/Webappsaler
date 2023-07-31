@@ -11,7 +11,16 @@ class EquipeController extends \Phalcon\Mvc\Controller
 
     public function indexAction( )
     {
-        $equipes = Equipe::find(['include' => 'chefDeProjet']);
+        $equipes = [];
+        foreach (Equipe::find() as $equipe) {
+            $equipes [] = [
+                'id' => $equipe->getId(),
+                'chefDeProjet_id'=>$equipe->getChefDeProjetId(),
+                'nom'=>$equipe->getNom(),
+                'cdp' => $equipe->Chefdeprojet->Collaborateur->getPrenomNom()
+            ];
+
+        }
         $this->view->setVar('equipes', $equipes);
     }
 
