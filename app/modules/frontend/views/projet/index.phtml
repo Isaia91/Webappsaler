@@ -1,0 +1,40 @@
+<?php $this->partial('partials/index'); ?>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">id_developpeur</th>
+        <th scope="col">id_chef_de_projet</th>
+        <th scope="col">id_application</th>
+        <th scope="col">id_module</th>
+        <th scope="col">id_composant</th>
+        <th scope="col">type</th>
+        <th scope="col">id_client</th>
+        <th scope="col">prix</th>
+        <th scope="col">statut</th>
+    </tr>
+    </thead>
+    <?php if (!empty($projets)) {
+        foreach ($projets as $projet) { ?>
+
+            <tr>
+                <td><?php echo $projet['id']; ?></td>
+                <td><?php echo $projet['id_developpeur']; ?></td>
+                <td><?php echo $projet['id_chef_de_projet']; ?></td>
+                <td><?php echo $projet['id_application']; ?></td>
+                <td><?php echo $projet['id_module']; ?></td>
+                <td><?php echo $projet['id_composant']; ?></td>
+                <td><?php echo $projet['type']; ?></td>
+                <td><?php echo $projet['id_client']; ?></td>
+                <td><?php echo $projet['prix']; ?></td>
+                <td><?php echo $projet['statut']; ?></td>
+
+
+            </tr>
+        <?php }
+    } else { ?>
+        <tr>
+            <td colspan="3">Aucun projet trouvé.</td>
+        </tr>
+    <?php } ?>
+</table>
