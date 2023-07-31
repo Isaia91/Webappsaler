@@ -1,0 +1,25 @@
+<?php $this->partial('partials/index'); ?>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">Chef de projet</th>
+        <th scope="col">nom</th>
+    </tr>
+    </thead>
+    <?php if (!empty($equipes)) {
+        foreach ($equipes as $equipe) { ?>
+
+            <tr>
+                <td><?php echo $equipe->id; ?></td>
+                <td><?php echo $equipe->chefDeProjet_id; ?></td>
+                <td><?php echo $equipe->nom; ?></td>
+
+            </tr>
+        <?php }
+    } else { ?>
+        <tr>
+            <td colspan="3">Aucun collabo_ trouvé.</td>
+        </tr>
+    <?php } ?>
+</table>
