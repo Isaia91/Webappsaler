@@ -22,7 +22,45 @@ class EquipeController extends \Phalcon\Mvc\Controller
             ];
             }
 
-        $equipesHtml = "";
+        $equipesHtml = "<br>
+                        <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal'>
+                            Créer une équipe
+                        </button>
+                        <br>
+                        <div class='modal fade' id='exampleModal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h5 class='modal-title' id='exampleModalLabel'>Modal title</h5>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <form>
+                                            <div class='col m-2'>
+                                                <input type='text' class='form-control' placeholder='Nom équipe'>
+                                            </div>
+                                            <div class='col m-2'>
+                                                <div class='dropdown'>
+                                                    <button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenu2' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                                                        Chef d'équipe
+                                                    </button>
+                                                    <div class='dropdown-menu' aria-labelledby='dropdownMenu2'>
+                                                        <button class='dropdown-item' type='button'>Action</button>
+                                                        <button class='dropdown-item' type='button'>Another action</button>
+                                                        <button class='dropdown-item' type='button'>Something else here</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                                        <button type='button' class='btn btn-primary'>Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>";
         foreach ($nomequipes as $nomequipe) {
             $equipesHtml .= "<h2>" . $nomequipe['nom'] ."</h2>";
             $equipesHtml .= "<h4>" .  " Chef de projet : ".$nomequipe['nomcdp']."</h4>";
@@ -47,27 +85,9 @@ class EquipeController extends \Phalcon\Mvc\Controller
             }
             $equipesHtml .= "</tbody>";
             $equipesHtml .= "</table>";
-            $equipesHtml .= "<br>";
+            $equipesHtml .= "<br> <br>";
         }
 
-        /*
-        foreach (Equipe::find() as $equipe) {
-            $equipesHtml.="<tr>";
-            $equipesHtml.="<td>".$equipe->getId()."</td>";
-            $equipesHtml.="<td>".$equipe->getChefDeProjetId()."</td>";
-            $equipesHtml.="<td>".$equipe->getNom()."</td>";
-            $equipesHtml.="<td>".$equipe->Chefdeprojet->Collaborateur->getPrenomNom()."</td>";
-            $equipesHtml.="</tr>";
-
-
-            $equipes [] = [
-                'id' => $equipe->getId(),
-                'chefDeProjet_id'=>$equipe->getChefDeProjetId(),
-                'nom'=>$equipe->getNom(),
-                'cdp' => $equipe->Chefdeprojet->Collaborateur->getPrenomNom()
-            ];
-
-        }*/
         $equipesHtml.="</table>";
         $this->view->setVar('equipesHtml', $equipesHtml);
     }
