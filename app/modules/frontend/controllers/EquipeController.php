@@ -130,7 +130,8 @@ class EquipeController extends \Phalcon\Mvc\Controller
             $equipe->setNom($nomEquipe);
             if ($equipe->save()) {
                 // Succès : l'équipe a été enregistrée avec succès en base de données
-                echo "L'équipe a été enregistrée avec succès !";
+                $this->response->redirect('test1/equipe');
+                return;
             } else {
                 // Échec : il y a eu une erreur lors de l'enregistrement en base de données
                 echo "Erreur lors de l'enregistrement de l'équipe.";
