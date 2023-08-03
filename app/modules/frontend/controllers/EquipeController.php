@@ -125,12 +125,20 @@ class EquipeController extends \Phalcon\Mvc\Controller
         if($this->request->isPost()){
              $cdp= $this ->request ->getPost('chefDeProjet');
              $nomEquipe=$this -> request -> getPost('nomEquipe');
-             $x= [] ;
-             $x [] =[
-                    'chefProjet' => $cdp,
-                    'nomEquipe'=>$nomEquipe
-            ];
-             var_dump($x);
+            $equipe = new Equipe();
+            $equipe->setChefDeProjetId($cdp);
+            $equipe->setNom($nomEquipe);
+            if ($equipe->save()) {
+                // Succès : l'équipe a été enregistrée avec succès en base de données
+                echo "L'équipe a été enregistrée avec succès !";
+            } else {
+                // Échec : il y a eu une erreur lors de l'enregistrement en base de données
+                echo "Erreur lors de l'enregistrement de l'équipe.";
+                // Vous pouvez également afficher les erreurs de validation en cas d'échec.
+                foreach ($equipe->getMessages() as $message) {
+                    echo $message, "<br>";
+                }
+            }
         }
     }
 }
