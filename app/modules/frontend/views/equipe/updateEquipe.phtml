@@ -1,0 +1,33 @@
+<?php $this->partial('partials/index'); ?>
+<div class="row">
+    <form action="/test1/equipe/createEquipe" method="post">
+        <div class="col m-2">
+            <label for="nomEquipe">Nom d'équipe</label>
+            <input type="text" class="form-control" name="nomEquipe" placeholder="Nom équipe">
+        </div>
+        <div class="col m-2">
+            <div class="dropdown">
+                <label for="chefDeProjet">Nom chef de projet</label>
+                <select class="form-select" name="chefDeProjet" aria-label="Default select example"><option value="1">Jean Dupont</option><option value="2">Marie Martin</option><option value="3">Pierre Durand</option></select>
+            </div>
+        </div>
+        <div class="col m-2">
+            <div class="dropdown"><br><input type="checkbox" value="1" id="checkbox1" name="membresEquipe[]">
+                <label for="checkbox1">Sophie Lefevre</label>
+                <br>
+                <input type="checkbox" value="2" id="checkbox2" name="membresEquipe[]">
+                <label for="checkbox2">Luc Moreau</label>
+                <br>
+                <input type="checkbox" value="3" id="checkbox3" name="membresEquipe[]">
+                <label for="checkbox3">John Doe</label>
+                <br>
+                <input type="checkbox" value="4" id="checkbox4" name="membresEquipe[]">
+                <label for="checkbox4">Jack Black</label>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</div>
