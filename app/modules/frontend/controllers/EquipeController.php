@@ -179,23 +179,26 @@ class EquipeController extends \Phalcon\Mvc\Controller
     }
     public function deleteEquipeAction()
     {
-        $id=$this->request->getPost('supprimer');
+        $id = $this->request->getPost('supprimer');
         $equipe = Equipe::findFirst($id);
         if (!$equipe) {
             return $this->response->redirect('error-page');
         }
+        //Il faut d'abord supprimer les membres d'equipe avant de supprimer l'equipe
+        $equipeMembres = $equipe->getEquipeMembres();
+        foreach ($equipeMembres as $equipeMembre) {
+            $equipeMembre->delete();
+        }
 
-        // Supprimez l'équipe de la base de données
+        // Ensuite, supprimez l'équipe
         if ($equipe->delete()) {
             return $this->response->redirect('test1/equipe');
         } else {
             echo "Erreur lors de la suppression de l'équipe.";
-            // Vous pouvez également afficher les erreurs de suppression en cas d'échec.
             foreach ($equipe->getMessages() as $message) {
                 echo $message, "<br>";
             }
         }
-
     }
 }
 
