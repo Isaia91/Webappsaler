@@ -49,7 +49,7 @@ class EquipeController extends \Phalcon\Mvc\Controller
         $equipesHtml .="<select class='form-select' name='chefDeProjet' aria-label='Default select example'>";
         foreach (ChefDeProjet::find() as $cdp) {
             $equipesHtml .="<option value=".$cdp->getId().">".$cdp->Collaborateur->getPrenomNom()."</option>";
-                                                        }
+        }
         $equipesHtml .="</select>";
 
         $equipesHtml .="</div>";
@@ -61,7 +61,7 @@ class EquipeController extends \Phalcon\Mvc\Controller
             $equipesHtml .= "<br><input type='checkbox' value=".$dev->getId()." id='checkbox".$i."' name='membresEquipe[]' />
             <label for='checkbox".$i."'>".$dev->Collaborateur->getPrenomNom()."</label>";
             $i++;
-                                                                        }
+        }
 
         $equipesHtml .="</select>";
         $equipesHtml .="</div>";
@@ -82,9 +82,10 @@ class EquipeController extends \Phalcon\Mvc\Controller
             $equipesHtml .="</div>";
             $equipesHtml .="<div class='col-md-3'>";
             $equipesHtml .="<form action='./equipe/UpdateEquipe' method='Post'>";
-            $equipesHtml .="<button type='submit' class='btn btn-primary' value=".$nomequipe['id'].">
+/*            $equipesHtml .="<button type='submit' class='btn btn-primary' value=".$nomequipe['id'].">
                                         Modifier
-                             </button>";
+                             </button>";*/
+            $equipesHtml .= "<a href='" . $this->url->get('/test1/equipe/updateEquipe/'). "'class='btn btn-primary'>Modifier</a>";
             $equipesHtml .="</form>";
             $equipesHtml .="</div>";
             $equipesHtml .="<div class='col-md-3'>";
