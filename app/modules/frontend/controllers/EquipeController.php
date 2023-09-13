@@ -26,15 +26,15 @@ class EquipeController extends \Phalcon\Mvc\Controller
         }
 
         $equipesHtml = "<br>";
-        $equipesHtml .="<button type='button' class='btn btn-success' data-bs-toggle='modal' data-bs-target='#exampleModal'>
+        $equipesHtml .="<button type='button' class='btn btn-success' data-bs-toggle='modal' data-bs-target='#createModale'>
                                 Créer une équipe
                          </button>";
         $equipesHtml .="<br>";
-        $equipesHtml .="<div class='modal fade' id='exampleModal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>";
+        $equipesHtml .="<div class='modal fade' id='createModale' tabindex='-1' aria-labelledby='createModaleLabel' aria-hidden='true'>";
         $equipesHtml .="<div class='modal-dialog'>";
         $equipesHtml .="<div class='modal-content'>";
         $equipesHtml .="<div class='modal-header'>";
-        $equipesHtml .="<h5 class='modal-title' id='exampleModalLabel'>Modal title</h5>";
+        $equipesHtml .="<h5 class='modal-title' id='createModaleLabel'>Créer une équipe</h5>";
         $equipesHtml .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
         $equipesHtml .="</div>";
         $equipesHtml .="<div class='modal-body'>";
@@ -74,6 +74,10 @@ class EquipeController extends \Phalcon\Mvc\Controller
         $equipesHtml .="</div>";
         $equipesHtml .="</div>";
         $equipesHtml .="</div>";
+
+
+
+        /*$equipesHtml .="<onestla>";  Permet de savoir ou l'on se trouve dans le html */
         $equipesHtml .="<br>";
         foreach ($nomequipes as $nomequipe) {
             $equipesHtml .="<div class='row'>";
@@ -81,12 +85,10 @@ class EquipeController extends \Phalcon\Mvc\Controller
             $equipesHtml .="<h2>" . $nomequipe['nom'] ."</h2>";
             $equipesHtml .="</div>";
             $equipesHtml .="<div class='col-md-3'>";
-            $equipesHtml .="<form action='./equipe/UpdateEquipe' method='Post'>";
-/*            $equipesHtml .="<button type='submit' class='btn btn-primary' value=".$nomequipe['id'].">
-                                        Modifier
-                             </button>";*/
-            $equipesHtml .= "<a href='" . $this->url->get('/test1/equipe/updateEquipe/'). "'class='btn btn-primary'>Modifier</a>";
-            $equipesHtml .="</form>";
+            $equipesHtml .="<button type='button' name='alter' data-bs-toggle='modal' data-bs-target='#alterModale".$nomequipe['id']."' class='btn btn-primary' value=".$nomequipe['id'].">";
+            $equipesHtml .="Modifier";
+            $equipesHtml .="</button>";
+            /*$equipesHtml .= "<a href='" . $this->url->get('/test1/equipe/updateEquipe/'). "'class='btn btn-primary'>Modifier</a>";*/
             $equipesHtml .="</div>";
             $equipesHtml .="<div class='col-md-3'>";
             $equipesHtml .="<form action='./equipe/deleteEquipe' method='Post'>";
@@ -127,6 +129,55 @@ class EquipeController extends \Phalcon\Mvc\Controller
                     $equipesHtml .= "<td>" . $thisRole . "</td>";
                     $equipesHtml .= "</tr>";
                 }
+                //Modal pour modifier une equipe
+                $equipesHtml .="<div class='modal fade' id='alterModale".$nomequipe['id']."' tabindex='-1' aria-labelledby='alterModaleLabel' aria-hidden='true'>";
+                $equipesHtml .="<div class='modal-dialog'>";
+                $equipesHtml .="<div class='modal-content'>";
+                $equipesHtml .="<div class='modal-header'>";
+                $equipesHtml .="<h5 class='modal-title' id='alterModaleLabel'>Modifier une équipe : ". $nomequipe['nom']."</h5>";
+                $equipesHtml .="<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+                $equipesHtml .="</div>";
+                $equipesHtml .="<div class='modal-body'>";
+                $equipesHtml .="<form action='/test1/equipe/updateEquipe' method='post'>";
+                $equipesHtml .="<div class='col m-2'>";
+                $equipesHtml .="<label for='nomEquipe'>Nom d'équipe</label>";
+                $equipesHtml .="<input type='number' name='id' class='form-control' style='display:none;' value='".$nomequipe['id']."'>";
+                $equipesHtml .="<input type='text' class='form-control' name='nomEquipe' value='".$nomequipe['nom']."' placeholder='".$nomequipe['nom']."'>";
+                $equipesHtml .="</div>";
+                $equipesHtml .="<div class='col m-2'>";
+                $equipesHtml .="<div class='dropdown'>";
+                $equipesHtml .="<label for='chefDeProjet'>Nom chef de projet</label>";
+                $equipesHtml .="<select class='form-select' name='chefDeProjet' aria-label='Default select example' selected='".$nomequipe['cdp']."'>";
+                foreach (ChefDeProjet::find() as $cdp) {
+                    $selected = ($cdp->getId() == $nomequipe['cdp']) ? 'selected' : '';
+                    $equipesHtml .= "<option value=".$cdp->getId()." $selected>".$cdp->Collaborateur->getPrenomNom()."</option>";
+                }
+                $equipesHtml .="</select>";
+
+                $equipesHtml .="</div>";
+                $equipesHtml .="</div>";
+                $equipesHtml .="<div class='col m-2'>";
+                $equipesHtml .="<div class='dropdown'>";
+                $i=1;
+                foreach (Developpeur::find() as $dev) {
+                    $equipesHtml .= "<br><input type='checkbox' value=".$dev->getId()." id='checkbox".$i."' name='membresEquipe[]' /> ";
+                    $equipesHtml .= "<label for='checkbox".$i."'>".$dev->Collaborateur->getPrenomNom()."</label>";
+                    $i++;
+                }
+
+                $equipesHtml .="</select>";
+                $equipesHtml .="</div>";
+                $equipesHtml .="</div>";
+                $equipesHtml .="</div>";
+                $equipesHtml .="<div class='modal-footer'>";
+                $equipesHtml .="<button type='submit' class='btn btn-primary'>Save</button>";
+                $equipesHtml .="</div>";
+                $equipesHtml .="</form>";
+                $equipesHtml .="</div>";
+                $equipesHtml .="</div>";
+                $equipesHtml .="</div>";
+
+                //Modal pour modifier une equipe
             }
             $equipesHtml .= "</tbody>";
             $equipesHtml .= "</table>";
@@ -168,28 +219,80 @@ class EquipeController extends \Phalcon\Mvc\Controller
     }
 
     public function updateEquipeAction(){
+        if($this->request->isPost()){
+            $equipeId = $this->request->getPost('id');
 
+            $equipe = Equipe::findFirst($equipeId);
+
+            if (!$equipe) {
+                echo "Équipe non trouvée.";
+                return;
+            }
+
+            // Récupére les champs du formulaire
+            $nomEquipe = $this->request->getPost('nomEquipe');
+            $chefDeProjetId = $this->request->getPost('chefDeProjet');
+            $membresEquipe = $this->request->getPost('membresEquipe');
+
+            // Vérifier si au moins un membre d'équipe est coché pour pas que l'equipe soit vide
+            if (empty($membresEquipe)) {
+                return;
+            }
+
+            // Mettre à jour les propriétés de l'équipe
+            $equipe->setNom($nomEquipe);
+            $equipe->setChefDeProjetId($chefDeProjetId);
+
+            // Supprimer les membres actuels de l'équipe
+            $equipeMembres = $equipe->getEquipeMembres();
+            foreach ($equipeMembres as $equipeMembre) {
+                $equipeMembre->delete();
+            }
+
+            // Ajout des nouveaux membres a k'equipe
+            foreach ($membresEquipe as $devId) {
+                $equipeMembre = new EquipeMembres();
+                $equipeMembre->setIdEquipe($equipeId);
+                $equipeMembre->setIdDeveloppeur($devId);
+                $equipeMembre->save();
+            }
+
+            // Sauvegarder l'équipe
+            if ($equipe->save()) {
+                echo "Équipe mise à jour avec succès.";
+            } else {
+                echo "Erreur lors de la mise à jour de l'équipe.";
+                foreach ($equipe->getMessages() as $message) {
+                    echo $message, "<br>";
+                }
+            }
+        }
     }
+
+
+
     public function deleteEquipeAction()
     {
-        $id = $this->request->getPost('supprimer');
-        $equipe = Equipe::findFirst($id);
-        if (!$equipe) {
-            return $this->response->redirect('error-page');
-        }
-        //Il faut d'abord supprimer les membres d'equipe avant de supprimer l'equipe
-        $equipeMembres = $equipe->getEquipeMembres();
-        foreach ($equipeMembres as $equipeMembre) {
-            $equipeMembre->delete();
-        }
+        if($this->request->isPost()) {
+            $id = $this->request->getPost('supprimer');
+            $equipe = Equipe::findFirst($id);
+            if (!$equipe) {
+                return $this->response->redirect('error-page');
+            }
+            //Il faut d'abord supprimer les membres d'equipe avant de supprimer l'equipe
+            $equipeMembres = $equipe->getEquipeMembres();
+            foreach ($equipeMembres as $equipeMembre) {
+                $equipeMembre->delete();
+            }
 
-        // Ensuite, supprimez l'équipe
-        if ($equipe->delete()) {
-            return $this->response->redirect('test1/equipe');
-        } else {
-            echo "Erreur lors de la suppression de l'équipe.";
-            foreach ($equipe->getMessages() as $message) {
-                echo $message, "<br>";
+            // Ensuite, supprimez l'équipe
+            if ($equipe->delete()) {
+                return $this->response->redirect('test1/equipe');
+            } else {
+                echo "Erreur lors de la suppression de l'équipe.";
+                foreach ($equipe->getMessages() as $message) {
+                    echo $message, "<br>";
+                }
             }
         }
     }
