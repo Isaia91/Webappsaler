@@ -188,6 +188,34 @@ class EquipeController extends \Phalcon\Mvc\Controller
         $this->view->setVar('equipesHtml', $equipesHtml);
     }
 
+    private function equipeChecker(int $equipeId) {
+        $thisEquipe = Equipe::findFirst($equipeId);
+
+        if ($thisEquipe) {
+            $thisCdp = $thisEquipe->getChefDeProjetId();
+            $thisEquipeMembers = $thisEquipe->getEquipeMembres();
+
+            foreach (Equipe::find() as $equipe) {
+                if ($equipe->getId() != $equipeId) {
+                    $equipeMembers = $equipe->getEquipeMembres();
+
+                    if ($equipe->getChefDeProjetId() === $thisCdp) {
+                        foreach ($thisEquipeMembers as $thisEquipeMember) {
+                            foreach ($equipeMembers as $equipeMember) {
+                                if ($thisEquipeMember->getIdDeveloppeur() === $equipeMember->getIdDeveloppeur()) {
+                                    return "Impossible d'associer le membre d'équipe à cette équipe car ils sont déjà dans l'équipe " . $equipe->getNom();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true; // La vérification est réussie
+        }
+
+        return "L'équipe avec l'ID spécifié n'existe pas.";
+    }
 
     public function createEquipeAction(){
         if($this->request->isPost()){
@@ -225,46 +253,50 @@ class EquipeController extends \Phalcon\Mvc\Controller
             $equipe = Equipe::findFirst($equipeId);
 
             if (!$equipe) {
-                echo "Équipe non trouvée.";
-                return;
+                $this->response->redirect('/test1/equipe');
             }
+            if ($this->equipeChecker($equipeId)){
+                // Récupére les champs du formulaire
+                $nomEquipe = $this->request->getPost('nomEquipe');
+                $chefDeProjetId = $this->request->getPost('chefDeProjet');
+                $membresEquipe = $this->request->getPost('membresEquipe');
 
-            // Récupére les champs du formulaire
-            $nomEquipe = $this->request->getPost('nomEquipe');
-            $chefDeProjetId = $this->request->getPost('chefDeProjet');
-            $membresEquipe = $this->request->getPost('membresEquipe');
-
-            // Vérifier si au moins un membre d'équipe est coché pour pas que l'equipe soit vide
-            if (empty($membresEquipe)) {
-                return;
-            }
-
-            // Mettre à jour les propriétés de l'équipe
-            $equipe->setNom($nomEquipe);
-            $equipe->setChefDeProjetId($chefDeProjetId);
-
-            // Supprimer les membres actuels de l'équipe
-            $equipeMembres = $equipe->getEquipeMembres();
-            foreach ($equipeMembres as $equipeMembre) {
-                $equipeMembre->delete();
-            }
-
-            // Ajout des nouveaux membres a k'equipe
-            foreach ($membresEquipe as $devId) {
-                $equipeMembre = new EquipeMembres();
-                $equipeMembre->setIdEquipe($equipeId);
-                $equipeMembre->setIdDeveloppeur($devId);
-                $equipeMembre->save();
-            }
-
-            // Sauvegarder l'équipe
-            if ($equipe->save()) {
-                echo "Équipe mise à jour avec succès.";
-            } else {
-                echo "Erreur lors de la mise à jour de l'équipe.";
-                foreach ($equipe->getMessages() as $message) {
-                    echo $message, "<br>";
+                // Vérifier si au moins un membre d'équipe est coché pour pas que l'equipe soit vide
+                if (empty($membresEquipe)) {
+                    //redirection vers la page d'accueil
+                    return $this->response->redirect('/test1/equipe');
                 }
+
+                // Mettre à jour les propriétés de l'équipe
+                $equipe->setNom($nomEquipe);
+                $equipe->setChefDeProjetId($chefDeProjetId);
+
+                // Supprimer les membres actuels de l'équipe
+                $equipeMembres = $equipe->getEquipeMembres();
+                foreach ($equipeMembres as $equipeMembre) {
+                    $equipeMembre->delete();
+                }
+
+                // Ajout des nouveaux membres a k'equipe
+                foreach ($membresEquipe as $devId) {
+                    $equipeMembre = new EquipeMembres();
+                    $equipeMembre->setIdEquipe($equipeId);
+                    $equipeMembre->setIdDeveloppeur($devId);
+                    $equipeMembre->save();
+                }
+
+                // Sauvegarder l'équipe
+                if ($equipe->save()) {
+                    return $this->response->redirect('/test1/equipe');
+                } else {
+                    echo "Erreur lors de la mise à jour de l'équipe.";
+                    foreach ($equipe->getMessages() as $message) {
+                        echo $message, "<br>";
+                    }
+                }
+            }
+            else{
+                echo "vous ne pouvez pas assosier ce chef d'equipe avec ce membre d'equipe";
             }
         }
     }
