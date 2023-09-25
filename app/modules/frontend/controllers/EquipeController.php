@@ -58,8 +58,8 @@ class EquipeController extends \Phalcon\Mvc\Controller
         $equipesHtml .="<div class='dropdown'>";
         $i=1;
         foreach (Developpeur::find() as $dev) {
-            $equipesHtml .= "<br><input type='checkbox' value=".$dev->getId()." id='checkbox".$i."' name='membresEquipe[]' />
-            <label for='checkbox".$i."'>".$dev->Collaborateur->getPrenomNom()."</label>";
+            $equipesHtml .= "<br><input style='top:1.2rem; scale:1.7;margin-right:0.8rem' type='checkbox' value=".$dev->getId()." id='checkbox".$i."' name='membresEquipe[]' />";
+            $equipesHtml .= "<label style='padding-top: 19px;'  for='checkbox".$i."'>".$dev->Collaborateur->getPrenomNom()."</label>";
             $i++;
         }
 
@@ -160,8 +160,10 @@ class EquipeController extends \Phalcon\Mvc\Controller
                 $equipesHtml .="<div class='dropdown'>";
                 $i=1;
                 foreach (Developpeur::find() as $dev) {
-                    $equipesHtml .= "<br><input type='checkbox' value=".$dev->getId()." id='checkbox".$i."' name='membresEquipe[]' /> ";
-                    $equipesHtml .= "<label for='checkbox".$i."'>".$dev->Collaborateur->getPrenomNom()."</label>";
+                    $equipesHtml .= "<div>";
+                    $equipesHtml .= "<br><input style='top:1.2rem; scale:1.7;margin-right:0.8rem' type='checkbox' value=".$dev->getId()." id='alterCheckbox".$i."' name='membresEquipe[]' /> ";
+                    $equipesHtml .= "<label style='padding-top: 19px;' for='alterCheckbox".$i."'>".$dev->Collaborateur->getPrenomNom()."</label>";
+                    $equipesHtml .= "</div>";
                     $i++;
                 }
 
@@ -188,12 +190,11 @@ class EquipeController extends \Phalcon\Mvc\Controller
         $this->view->setVar('equipesHtml', $equipesHtml);
     }
 
-    private function equipeChecker(int $equipeId) {
+    private function equipeChecker( $equipeId,$postedEquipeCdp,$postedEquipeMembers) {
         $thisEquipe = Equipe::findFirst($equipeId);
-
         if ($thisEquipe) {
-            $thisCdp = $thisEquipe->getChefDeProjetId();
-            $thisEquipeMembers = $thisEquipe->getEquipeMembres();
+            $thisCdp = $postedEquipeCdp;
+            $thisEquipeMembers = $postedEquipeMembers;
 
             foreach (Equipe::find() as $equipe) {
                 if ($equipe->getId() != $equipeId) {
@@ -202,8 +203,8 @@ class EquipeController extends \Phalcon\Mvc\Controller
                     if ($equipe->getChefDeProjetId() === $thisCdp) {
                         foreach ($thisEquipeMembers as $thisEquipeMember) {
                             foreach ($equipeMembers as $equipeMember) {
-                                if ($thisEquipeMember->getIdDeveloppeur() === $equipeMember->getIdDeveloppeur()) {
-                                    return "Impossible d'associer le membre d'équipe à cette équipe car ils sont déjà dans l'équipe " . $equipe->getNom();
+                                if ($thisEquipeMember->getIdDeveloppeur() == $equipeMember->getIdDeveloppeur()) {
+                                    return false;
                                 }
                             }
                         }
@@ -214,7 +215,9 @@ class EquipeController extends \Phalcon\Mvc\Controller
             return true; // La vérification est réussie
         }
 
-        return "L'équipe avec l'ID spécifié n'existe pas.";
+        else {
+            return false; // l'equipe n'est pas trouvé
+        }
     }
 
     public function createEquipeAction(){
@@ -248,18 +251,30 @@ class EquipeController extends \Phalcon\Mvc\Controller
 
     public function updateEquipeAction(){
         if($this->request->isPost()){
-            $equipeId = $this->request->getPost('id');
-
+            $equipeId = (int)  $this->request->getPost('id');
             $equipe = Equipe::findFirst($equipeId);
-
+            $equipeMembers = $equipe->getEquipeMembres();
             if (!$equipe) {
                 $this->response->redirect('/test1/equipe');
             }
-            if ($this->equipeChecker($equipeId)){
-                // Récupére les champs du formulaire
-                $nomEquipe = $this->request->getPost('nomEquipe');
-                $chefDeProjetId = $this->request->getPost('chefDeProjet');
-                $membresEquipe = $this->request->getPost('membresEquipe');
+            // Récupére les champs du formulaire
+            $nomEquipe = $this->request->getPost('nomEquipe');
+            $chefDeProjetId = $this->request->getPost('chefDeProjet');
+            $membresEquipe = $this->request->getPost('membresEquipe');
+
+            if ($this->equipeChecker($equipeId,$chefDeProjetId,$membresEquipe)){
+                //return ("j'ai bien validé  equipeChecker()");
+//                $newequipe = [];
+//                $oldequipe = [];
+//                foreach ($equipeMembers as $em){
+//                    array_push($oldequipe,$em->getId());
+//                }
+//                foreach ($membresEquipe as $me){
+//                    array_push($newequipe,$me);
+//                }
+                //return "newequipe ".var_dump($newequipe) . " equipe id : $equipeId // oldequipe : ". var_dump($oldequipe);
+
+
 
                 // Vérifier si au moins un membre d'équipe est coché pour pas que l'equipe soit vide
                 if (empty($membresEquipe)) {
