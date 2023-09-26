@@ -199,11 +199,11 @@ class EquipeController extends \Phalcon\Mvc\Controller
             foreach (Equipe::find() as $equipe) {
                 if ($equipe->getId() != $equipeId) {
                     $equipeMembers = $equipe->getEquipeMembres();
-
+                        //return var_dump($equipeMembers->toArray());
                     if ($equipe->getChefDeProjetId() === $thisCdp) {
                         foreach ($thisEquipeMembers as $thisEquipeMember) {
                             foreach ($equipeMembers as $equipeMember) {
-                                if ($thisEquipeMember->getIdDeveloppeur() == $equipeMember->getIdDeveloppeur()) {
+                                if ($thisEquipeMember == $equipeMember->getIdDeveloppeur()) {
                                     return false;
                                 }
                             }
@@ -310,9 +310,11 @@ class EquipeController extends \Phalcon\Mvc\Controller
                     }
                 }
             }
-            else{
-                echo "vous ne pouvez pas assosier ce chef d'equipe avec ce membre d'equipe";
+            else {
+                return( "nope" ) ;
             }
+
+
         }
     }
 
