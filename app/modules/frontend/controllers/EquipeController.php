@@ -76,7 +76,6 @@ class EquipeController extends \Phalcon\Mvc\Controller
         $equipesHtml .="</div>";
 
 
-
         /*$equipesHtml .="<onestla>";  Permet de savoir ou l'on se trouve dans le html */
         $equipesHtml .="<br>";
         foreach ($nomequipes as $nomequipe) {
@@ -263,20 +262,6 @@ class EquipeController extends \Phalcon\Mvc\Controller
             $membresEquipe = $this->request->getPost('membresEquipe');
 
             if ($this->equipeChecker($equipeId,$chefDeProjetId,$membresEquipe)){
-                //return ("j'ai bien validé  equipeChecker()");
-//                $newequipe = [];
-//                $oldequipe = [];
-//                foreach ($equipeMembers as $em){
-//                    array_push($oldequipe,$em->getId());
-//                }
-//                foreach ($membresEquipe as $me){
-//                    array_push($newequipe,$me);
-//                }
-                //return "newequipe ".var_dump($newequipe) . " equipe id : $equipeId // oldequipe : ". var_dump($oldequipe);
-
-
-
-                // Vérifier si au moins un membre d'équipe est coché pour pas que l'equipe soit vide
                 if (empty($membresEquipe)) {
                     //redirection vers la page d'accueil
                     return $this->response->redirect('/test1/equipe');
@@ -311,7 +296,10 @@ class EquipeController extends \Phalcon\Mvc\Controller
                 }
             }
             else {
-                return( "nope" ) ;
+                $chefDeProjetBusy = ChefDeProjet::findFirstById($chefDeProjetId);
+                $chefDeProjetBusy = $chefDeProjetBusy->Collaborateur->getPrenomNom();
+                $this->view->setVar('chefDeProjet', $chefDeProjetBusy);
+                $this->view->pick("partials/errorModal");
             }
 
 
@@ -345,5 +333,11 @@ class EquipeController extends \Phalcon\Mvc\Controller
             }
         }
     }
+
+    private function showErrorModale(){
+
+    }
 }
+
+
 
