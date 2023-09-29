@@ -11,8 +11,10 @@ class ProjetController extends \Phalcon\Mvc\Controller
 
     public function indexAction( )
     {
-        $projets = [];
+        $projets = []; #array pour stocker les projets
+
         foreach (Projet::find() as $projet) {
+            #pour chaque projets on recupere des données puis les stocks dans un tableau
             $projets [] = [
                 'id' => $projet->getId(),
                 'id_developpeur'=>$projet->getIdDeveloppeur(),
