@@ -1,7 +1,23 @@
-<div class="page-header">
-    <h1>Congratulations!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebApp Saler - Accueil</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-eOJMYsd53ii+4f/JZ5Pn5zO5r5lCgsJHdD06G7jRx1zAv/4tca1zL6C5I5AqQ5zF" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="page-header">
+        <h1>Welcome on Webappsaler!</h1>
+    </div>
+    <?php $this->partial('partials/index'); ?>
+    <p>You're now flying with Phalcon. Great things are about to happen!</p>
+    <?php echo $this->view->hello ?>
+    <p>This page is located at <code>views/index/index.phtml</code></p>
 </div>
 
-<p>You're now flying with Phalcon. Great things are about to happen!</p>
-<?php echo $this->view->hello ?>
-<p>This page is located at <code>views/index/index.phtml</code></p>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

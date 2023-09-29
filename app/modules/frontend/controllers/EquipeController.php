@@ -221,25 +221,72 @@ class EquipeController extends \Phalcon\Mvc\Controller
 
     public function createEquipeAction(){
         if($this->request->isPost()){
+            #on recupere les valeurs des champs du formulaire
             $cdp= $this ->request ->getPost('chefDeProjet');
             $nomEquipe=$this -> request -> getPost('nomEquipe');
+
+            #on creer une nouvelle equipe
             $equipe = new Equipe();
+
+            #on set le nom de l'equipe et son chef de projet
             $equipe->setChefDeProjetId($cdp);
             $equipe->setNom($nomEquipe);
 
+            #on sauvegarde l'equipe
             if ($equipe->save()) {
+                #si l'equipe est sauvegardé
+
+                #on recupere son id
                 $equipeId=$equipe->getId();
+
+                #on recupere les developpeurs selectionnés dans le formulaire
                 $selectedDeveloppeurs = $this->request->getPost('membresEquipe');
 
+                    #pour chaque dev selectionnés
                     foreach ($selectedDeveloppeurs as $devId) {
+                        #on creer un nouvel membre d'equipe
                         $equipeMembre = new EquipeMembres();
+                        #on set le membre de l'equipe et son equipe de la table equipes_membres
                         $equipeMembre->setIdEquipe($equipeId);
                         $equipeMembre->setIdDeveloppeur($devId);
+                        #puis on sauvegarde
                         $equipeMembre->save();
                     }
-                    $this->response->redirect('/test1/equipe');
-                return;
+
+                    #Une fois l'equipe sauvegarder et creer (a modifier) on la passe dans equipeChecker pour verifier si elle n'enfrunt pas les regles metiers
+                    if ($this->equipeChecker($equipeId, $cdp, $selectedDeveloppeurs)) {
+                        #si elle passe equipeChecker alors on est rediriger vers la page des equipes
+                        $this->response->redirect($this->url->get(VIEW_PATH."/equipe"));
+                    } else {
+                        #si l'equipe ne passe pas equipeChecker
+                        $equipeMembres = $equipe->getEquipeMembres();
+                        #on supprime chaque membre de l'equipe d'abord de equipe_membres
+                        foreach ($equipeMembres as $equipeMembre) {
+                            $equipeMembre->delete();
+                        }
+                        #Puis on supprime l'equipe
+                        $equipe->delete();
+
+
+                        #on recupere le chef de projet que l'on ne peut pas associer
+                        $chefDeProjetBusy = ChefDeProjet::findFirstById($cdp);
+                        #on recupere son nom et prenom
+                        $chefDeProjetBusy = $chefDeProjetBusy->Collaborateur->getPrenomNom();
+                        #on creer la var dans la view
+                        $this->view->setVar('chefDeProjet', $chefDeProjetBusy);
+                        #pour la redirection
+                        $route = $this->url->get(VIEW_PATH."/equipe");
+                        #on set la var route pour la redirection
+                        $this->view->setVar("lastRoute",$route);
+                        #on set le mssg d'erreur
+                        $this->view->setVar("errorMssg","Vous ne pouvez pas creer une equipe en associant $chefDeProjetBusy avec les membres que vous choisis");
+                        #on afficher la vue s'il y'a une erreur
+                        $this->view->pick("partials/errorModal");
+                    }
+                    //$this->response->redirect('/test1/equipe');
+
             } else {
+                #il y'a une erreur pour l'enregistrement d'equipe
                 echo "Erreur lors de l'enregistrement de l'équipe.";
                 foreach ($equipe->getMessages() as $message) {
                     echo $message, "<br>";
@@ -254,7 +301,7 @@ class EquipeController extends \Phalcon\Mvc\Controller
             $equipe = Equipe::findFirst($equipeId);
             $equipeMembers = $equipe->getEquipeMembres();
             if (!$equipe) {
-                $this->response->redirect('/test1/equipe');
+                $this->response->redirect($this->url->get(VIEW_PATH."/equipe"));
             }
             // Récupére les champs du formulaire
             $nomEquipe = $this->request->getPost('nomEquipe');
@@ -264,7 +311,7 @@ class EquipeController extends \Phalcon\Mvc\Controller
             if ($this->equipeChecker($equipeId,$chefDeProjetId,$membresEquipe)){
                 if (empty($membresEquipe)) {
                     //redirection vers la page d'accueil
-                    return $this->response->redirect('/test1/equipe');
+                    return $this->response->redirect($this->url->get(VIEW_PATH."/equipe"));
                 }
 
                 // Mettre à jour les propriétés de l'équipe
@@ -287,7 +334,7 @@ class EquipeController extends \Phalcon\Mvc\Controller
 
                 // Sauvegarder l'équipe
                 if ($equipe->save()) {
-                    return $this->response->redirect('/test1/equipe');
+                    return $this->response->redirect($this->url->get(VIEW_PATH."/equipe"));
                 } else {
                     echo "Erreur lors de la mise à jour de l'équipe.";
                     foreach ($equipe->getMessages() as $message) {
@@ -296,9 +343,13 @@ class EquipeController extends \Phalcon\Mvc\Controller
                 }
             }
             else {
+                #on prepare les variables pour le message d'erreur
                 $chefDeProjetBusy = ChefDeProjet::findFirstById($chefDeProjetId);
                 $chefDeProjetBusy = $chefDeProjetBusy->Collaborateur->getPrenomNom();
                 $this->view->setVar('chefDeProjet', $chefDeProjetBusy);
+                $route = $this->url->get(VIEW_PATH."/equipe");
+                $this->view->setVar("lastRoute",$route);
+                $this->view->setVar("errorMssg","Vous ne pouvez pas modifier cette equipe en associant $chefDeProjetBusy avec les membres que vous choisis");
                 $this->view->pick("partials/errorModal");
             }
 
@@ -324,7 +375,7 @@ class EquipeController extends \Phalcon\Mvc\Controller
 
             // Ensuite, supprimez l'équipe
             if ($equipe->delete()) {
-                return $this->response->redirect('test1/equipe');
+                return $this->response->redirect($this->url->get(VIEW_PATH."/equipe"));
             } else {
                 echo "Erreur lors de la suppression de l'équipe.";
                 foreach ($equipe->getMessages() as $message) {
@@ -334,9 +385,6 @@ class EquipeController extends \Phalcon\Mvc\Controller
         }
     }
 
-    private function showErrorModale(){
-
-    }
 }
 
 

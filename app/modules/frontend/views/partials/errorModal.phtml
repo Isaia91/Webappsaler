@@ -15,10 +15,11 @@
                 <h5 class="modal-title" id="exampleModalLabel">Erreur</h5>
             </div>
             <div class="modal-body">
-                Non vous ne pouvez pas associer ce     <?php echo $chefDeProjet; ?> avec ce(s) membre(s)
+                <?php echo $errorMssg; ?>
             </div>
+            <span class="modal-body">Vous allez etre redirigé vers votre ancienne page</span>
             <div class="modal-footer">
-                <a type="button" class="btn btn-primary" href="/test1/equipe">Retour</a>
+                <a type="button" class="btn btn-primary" href=<?php echo $lastRoute; ?> >Retour</a>
             </div>
         </div>
     </div>
@@ -40,5 +41,5 @@
         window.location.href = '/test1/equipe';
     }
 
-    setTimeout(redirectMe, 3000); // Redirection après 3 secondes
+    setTimeout(redirectMe, 5000); // Redirection après 3 secondes
 </script>
