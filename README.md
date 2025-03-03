@@ -1,5 +1,17 @@
 # Webappsaler
 
+Premier projet avec un framework : Phalcon en PHP
+
+Environnement :
+
+  OS : Linux (Xubuntu)
+  Base de données : MySQL
+  Langages :  HTML
+              CSS
+              JS
+              PHP (Framework Phalcon)
+              
+
 **Pour lancer le projet:**
   - Assurez-vous d'avoir un environnement permettant de lancer un projet phalcon :https://docs.phalcon.io/5.0/en/introduction
   - Pull le projet
